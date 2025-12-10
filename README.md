@@ -2,6 +2,10 @@
 
 A banking services RCS chatbot that enables customers to view accounts, manage cards, view statements, and find ATM/branch locations through Rich Communication Services (RCS) messaging.
 
+
+https://github.com/user-attachments/assets/c3974908-d8fe-4091-bbd0-734b2e4985fa
+
+
 ## Features
 
 ### Account Management
