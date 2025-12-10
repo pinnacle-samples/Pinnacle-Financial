@@ -1,12 +1,16 @@
 import { Router, Request, Response } from 'express';
-import { RequestWithMessageEvent, TriggerPayload } from './lib/brand/types';
+import { TriggerPayload } from './lib/brand/types';
 import { agent } from './lib/agent';
+import { rcsClient } from './lib/rcsClient';
 
 const pinnacleOneRouter = Router();
 
 pinnacleOneRouter.post('/', async (req: Request, res: Response) => {
   try {
-    const messageEvent = (req as RequestWithMessageEvent).messageEvent;
+    const messageEvent = await rcsClient.messages.process(req);
+    if (!('message' in messageEvent)) {
+      return res.status(200).json({ message: 'No message found' });
+    }
     const message = messageEvent.message;
     const from = messageEvent.conversation.from;
 
@@ -124,9 +128,8 @@ pinnacleOneRouter.post('/', async (req: Request, res: Response) => {
     }
 
     // Message or event was not captured by handler
-    console.error('[PinnacleOne]: Unhandled message type');
-    return res.status(400).json({
-      error: 'Unhandled message type',
+    return res.status(200).json({
+      message: 'Unhandled message type',
     });
   } catch (error) {
     console.error('[PinnacleOne]: Internal server error', error);

@@ -2,14 +2,30 @@ import { Payment, Statement, Location, Card } from './types';
 
 // Image URLs - replace with your own hosted images or set via environment variables
 const IMAGES = {
-  logo: process.env.BANK_LOGO_URL || 'https://images.unsplash.com/photo-1541354329998-f4d9a9f9297f?w=800',
-  statementSept: process.env.STATEMENT_SEPT_URL || 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800',
-  statementAug: process.env.STATEMENT_AUG_URL || 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800',
-  statementJuly: process.env.STATEMENT_JULY_URL || 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800',
-  bankBranch: process.env.BANK_BRANCH_URL || 'https://images.unsplash.com/photo-1541354329998-f4d9a9f9297f?w=800',
-  hours: process.env.HOURS_IMAGE_URL || 'https://images.unsplash.com/photo-1508962914676-134849a727f0?w=800',
-  creditCard: process.env.CREDIT_CARD_URL || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
-  debitCard: process.env.DEBIT_CARD_URL || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
+  logo:
+    process.env.BANK_LOGO_URL ||
+    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/bank-building.jpg',
+  statementSept:
+    process.env.STATEMENT_SEPT_URL ||
+    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/statements.jpg',
+  statementAug:
+    process.env.STATEMENT_AUG_URL ||
+    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/statements.jpg',
+  statementJuly:
+    process.env.STATEMENT_JULY_URL ||
+    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/statements.jpg',
+  bankBranch:
+    process.env.BANK_BRANCH_URL ||
+    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/bank-building.jpg',
+  hours:
+    process.env.HOURS_IMAGE_URL ||
+    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/hours.jpg',
+  creditCard:
+    process.env.CREDIT_CARD_URL ||
+    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/credit.png',
+  debitCard:
+    process.env.DEBIT_CARD_URL ||
+    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/debit.png',
 };
 
 export const business = {
@@ -26,7 +42,8 @@ export const recentPayments: Payment[] = [
     amount: '$87.43',
     date: 'Oct 11, 2025',
     category: 'Groceries',
-    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800',
+    image:
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/groceries.jpg',
   },
   {
     id: 'txn_002',
@@ -34,7 +51,8 @@ export const recentPayments: Payment[] = [
     amount: '$52.18',
     date: 'Oct 10, 2025',
     category: 'Gas',
-    image: 'https://images.unsplash.com/photo-1545458838-3c0c267f75a7?w=800',
+    image:
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/gas-station.jpg',
   },
   {
     id: 'txn_003',
@@ -42,7 +60,8 @@ export const recentPayments: Payment[] = [
     amount: '$15.99',
     date: 'Oct 9, 2025',
     category: 'Entertainment',
-    image: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=800',
+    image:
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/entertainment.jpg',
   },
   {
     id: 'txn_004',
@@ -50,7 +69,8 @@ export const recentPayments: Payment[] = [
     amount: '$6.75',
     date: 'Oct 8, 2025',
     category: 'Dining',
-    image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800',
+    image:
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/coffee.jpg',
   },
   {
     id: 'txn_005',
@@ -58,7 +78,8 @@ export const recentPayments: Payment[] = [
     amount: '$124.50',
     date: 'Oct 7, 2025',
     category: 'Shopping',
-    image: 'https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=800',
+    image:
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/shopping.jpg',
   },
 ];
 
@@ -101,7 +122,8 @@ export const locations: Location[] = [
     type: 'atm',
     address: '456 Market Street, San Francisco, CA 94103',
     distance: '0.5 miles',
-    image: 'https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=800',
+    image:
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/atm.jpg',
     lat: 37.7879,
     lng: -122.4074,
   },
@@ -110,7 +132,8 @@ export const locations: Location[] = [
     type: 'branch',
     address: '789 Montgomery St, San Francisco, CA 94104',
     distance: '0.8 miles',
-    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800',
+    image:
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/financial-center.jpg',
     lat: 37.7946,
     lng: -122.402,
   },
@@ -119,7 +142,8 @@ export const locations: Location[] = [
     type: 'atm',
     address: 'One Ferry Building, San Francisco, CA 94111',
     distance: '1.1 miles',
-    image: 'https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=800',
+    image:
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/atm.jpg',
     lat: 37.7955,
     lng: -122.3937,
   },
