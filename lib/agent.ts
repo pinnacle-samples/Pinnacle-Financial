@@ -7,7 +7,6 @@ import {
   locations,
   cards as defaultCards,
   hours,
-  IMAGES,
 } from './brand/data';
 import { Card } from './brand/types';
 
@@ -26,7 +25,7 @@ const MY_CARD_BUTTON: Pinnacle.RichButton = {
 
 const NEARBY_LOCATION_BUTTON: Pinnacle.RichButton = {
   type: 'requestUserLocation',
-  title: '📍 Nearby ATM/Branch',
+  title: 'Nearby ATM/Branch',
 };
 
 export class Agent extends BaseAgent {
@@ -63,11 +62,6 @@ export class Agent extends BaseAgent {
       quickReplies: [
         {
           type: 'trigger',
-          title: '🔚 End Demo',
-          payload: 'END_DEMO',
-        },
-        {
-          type: 'trigger',
           title: '🧾 Recent Payments',
           payload: JSON.stringify({ action: 'viewPayments' }),
         },
@@ -76,10 +70,14 @@ export class Agent extends BaseAgent {
           title: '📄 View Statements',
           payload: JSON.stringify({ action: 'viewStatements' }),
         },
-        NEARBY_LOCATION_BUTTON,
         MY_CARD_BUTTON,
+        NEARBY_LOCATION_BUTTON,
+        {
+          type: 'trigger',
+          title: '🔚 End Demo',
+          payload: 'END_DEMO',
+        },
       ],
-      options: { test_mode: this.TEST_MODE },
     });
   }
 
@@ -115,7 +113,6 @@ export class Agent extends BaseAgent {
         },
         MY_CARD_BUTTON,
       ],
-      options: { test_mode: this.TEST_MODE },
     });
   }
 
@@ -127,8 +124,9 @@ export class Agent extends BaseAgent {
       buttons: [
         {
           type: 'openUrl' as const,
-          title: '📄 View PDF',
+          title: 'View PDF',
           payload: statement.downloadUrl,
+          webviewMode: 'FULL' as const,
         },
       ],
     }));
@@ -151,7 +149,6 @@ export class Agent extends BaseAgent {
         },
         MY_CARD_BUTTON,
       ],
-      options: { test_mode: this.TEST_MODE },
     });
   }
 
@@ -165,7 +162,7 @@ export class Agent extends BaseAgent {
       buttons: [
         {
           type: 'sendLocation' as const,
-          title: '🗺️ Get Directions',
+          title: 'Get Directions',
           payload: location.address,
           latLong: { lat: location.lat, lng: location.lng },
         },
@@ -186,8 +183,18 @@ export class Agent extends BaseAgent {
       from: this.agentName,
       to,
       cards,
-      quickReplies: [],
-      options: { test_mode: this.TEST_MODE },
+      quickReplies: [
+        {
+          type: 'trigger',
+          title: '🏠 Main Menu',
+          payload: JSON.stringify({ action: 'showMainMenu' }),
+        },
+        {
+          type: 'trigger',
+          title: '🔚 End Demo',
+          payload: 'END_DEMO',
+        },
+      ],
     });
   }
 
@@ -216,7 +223,10 @@ export class Agent extends BaseAgent {
       const status = statusMap[card.status];
       const cardTypeLabel = card.cardType === 'credit' ? 'Credit Card' : 'Debit Card';
       const balanceLabel = card.cardType === 'credit' ? 'Balance Due' : 'Available Balance';
-      const cardImage = card.cardType === 'credit' ? IMAGES.creditCard : IMAGES.debitCard;
+      const cardImage =
+        card.cardType === 'credit'
+          ? 'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/card-credit.png'
+          : 'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/card-debit.png';
 
       return {
         title: `${card.type} •••• ${card.last4}`,
@@ -247,7 +257,6 @@ export class Agent extends BaseAgent {
       to,
       cards,
       quickReplies,
-      options: { test_mode: this.TEST_MODE },
     });
   }
 
@@ -262,7 +271,7 @@ export class Agent extends BaseAgent {
       to,
       text: `🔒 Card Locked Successfully\n\nYour ${card.type} ending in ${card.last4} has been locked.`,
       quickReplies: [
-        { type: 'call', title: '📞 Call Support', payload: '+15125551234' },
+        { type: 'call', title: 'Call Support', payload: '+15125551234' },
         {
           type: 'trigger',
           title: '🔓 Unlock Card',
@@ -272,7 +281,6 @@ export class Agent extends BaseAgent {
         NEARBY_LOCATION_BUTTON,
         MAIN_MENU_BUTTON,
       ],
-      options: { test_mode: this.TEST_MODE },
     });
   }
 
@@ -287,7 +295,6 @@ export class Agent extends BaseAgent {
       to,
       text: `✅ Card Unlocked Successfully\n\nYour ${card.type} ending in ${card.last4} is now active.`,
       quickReplies: [MY_CARD_BUTTON, NEARBY_LOCATION_BUTTON, MAIN_MENU_BUTTON],
-      options: { test_mode: this.TEST_MODE },
     });
   }
 
@@ -302,7 +309,6 @@ export class Agent extends BaseAgent {
       to,
       text: `✅ Card Activated Successfully\n\nYour ${card.type} ending in ${card.last4} is now active.`,
       quickReplies: [MY_CARD_BUTTON, NEARBY_LOCATION_BUTTON, MAIN_MENU_BUTTON],
-      options: { test_mode: this.TEST_MODE },
     });
   }
 
@@ -315,11 +321,10 @@ export class Agent extends BaseAgent {
       to,
       text: `🚨 Fraud Report Received\n\nCase Number: ${caseNumber}\n${transactionDetails}We take fraud seriously. Our team will investigate this within 5-10 business days. You'll receive an update via text.\n\nIf you need immediate assistance, please visit a nearby branch or call our fraud hotline.`,
       quickReplies: [
-        { type: 'call', title: '📞 Fraud Hotline', payload: '+15125551234' },
+        { type: 'call', title: 'Fraud Hotline', payload: '+15125551234' },
         MY_CARD_BUTTON,
         MAIN_MENU_BUTTON,
       ],
-      options: { test_mode: this.TEST_MODE },
     });
   }
 
@@ -329,7 +334,7 @@ export class Agent extends BaseAgent {
       to,
       text: `📄 No Additional Statements Available\n\nYou opened your account in September 2025. All available statements have been shown.\n\nIf you need older statements or have questions, please contact customer support or visit a nearby branch.`,
       quickReplies: [
-        { type: 'call', title: '📞 Call Support', payload: '+15125551234' },
+        { type: 'call', title: 'Call Support', payload: '+15125551234' },
         {
           type: 'trigger',
           title: '🧾 Recent Payments',
@@ -338,7 +343,6 @@ export class Agent extends BaseAgent {
         NEARBY_LOCATION_BUTTON,
         MAIN_MENU_BUTTON,
       ],
-      options: { test_mode: this.TEST_MODE },
     });
   }
 
@@ -362,7 +366,6 @@ export class Agent extends BaseAgent {
         },
         MAIN_MENU_BUTTON,
       ],
-      options: { test_mode: this.TEST_MODE },
     });
   }
 
@@ -378,7 +381,6 @@ export class Agent extends BaseAgent {
         to,
         text: "⚠️ No Active Credit Cards\n\nYou don't have any active credit cards available for payment.",
         quickReplies: [MY_CARD_BUTTON, MAIN_MENU_BUTTON],
-        options: { test_mode: this.TEST_MODE },
       });
     }
 
@@ -408,7 +410,6 @@ export class Agent extends BaseAgent {
         MY_CARD_BUTTON,
         MAIN_MENU_BUTTON,
       ],
-      options: { test_mode: this.TEST_MODE },
     });
   }
 
@@ -432,7 +433,6 @@ export class Agent extends BaseAgent {
         MY_CARD_BUTTON,
         MAIN_MENU_BUTTON,
       ],
-      options: { test_mode: this.TEST_MODE },
     });
   }
 }

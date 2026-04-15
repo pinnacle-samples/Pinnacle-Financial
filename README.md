@@ -1,172 +1,117 @@
-# Banking Services Chatbot
+# Pinnacle Financial — RCS Banking Services Chatbot
 
-A banking services RCS chatbot that enables customers to view accounts, manage cards, view statements, and find ATM/branch locations through Rich Communication Services (RCS) messaging.
+A banking services chatbot that runs over RCS. Customers can view recent payments, manage their cards (lock, unlock, activate, report fraud), pull recent statements, make a payment, view branch hours, and find ATM and branch locations — all from inside the messages app.
 
-## Features
+> **Live guide:** https://pinnacle.sh/samples/pinnacle-financial
 
-### Account Management
+https://github.com/user-attachments/assets/c3974908-d8fe-4091-bbd0-734b2e4985fa
 
-- View recent payments and transactions
-- Access monthly statements
-- Check account balances
+> Note: the visuals in this demo recording have since been refreshed with sharper brand assets. The conversation flow is identical to what you'll get from a fresh clone.
 
-### Card Management
+## What's inside
 
-- View card details and status
-- Lock and unlock debit/credit cards
-- Activate new cards
-- Report fraudulent transactions
+- View account balance, recent payments, and credit/debit cards
+- Lock, unlock, activate, and report fraud on cards inline
+- Pull recent monthly statements with downloadable PDFs
+- Make a payment + transaction history flow
+- ATM and branch finder with hours and location cards
+- All brand assets (logo, cards, statement PDFs) editable from one file
 
-### ATM/Branch Finder
-
-- Find nearby ATMs and branches
-- Get directions via location sharing
-- View branch operating hours
-
-### Payments
-
-- Make credit card payments
-- Choose minimum or full balance payments
-- View payment confirmation
-
-## Project Structure
-
-```
-Banking-Services/
-├── lib/
-│   ├── rcsClient.ts          # Pinnacle RCS client configuration
-│   ├── baseAgent.ts          # Base agent class with common functionality
-│   ├── agent.ts              # Banking agent implementation
-│   └── brand/
-│       ├── data.ts           # Mock banking data (payments, statements, locations)
-│       └── types.ts          # Business-specific type definitions
-├── server.ts                 # Main Express server
-├── router.ts                 # Express router for webhook handling
-├── package.json              # Project dependencies
-├── tsconfig.json             # TypeScript configuration
-├── .env.example              # Environment variables template
-└── .gitignore                # Git ignore rules
-```
-
-## Setup
-
-### Prerequisites
+## Prerequisites
 
 - Node.js 18+
-- A Pinnacle API account
-- RCS agent configured in Pinnacle
+- A Pinnacle account — [sign up](https://app.pinnacle.sh/auth/sign-up)
+- An RCS [test agent](https://docs.pinnacle.sh/guides/branded-test-agents) for development
+- A Pinnacle [API key](https://app.pinnacle.sh/dashboard/development/api-keys) and [webhook signing secret](https://app.pinnacle.sh/dashboard/development/webhooks)
 
-### Installation
+## Quick start
 
-1. Clone the repository
+```bash
+git clone https://github.com/pinnacle-samples/Pinnacle-Financial
+cd Pinnacle-Financial
+npm install
+cp .env.example .env
+# fill in PINNACLE_API_KEY, PINNACLE_AGENT_ID, PINNACLE_SIGNING_SECRET
+npm run dev
+```
 
-2. Install dependencies:
+Expose your webhook with [ngrok](https://ngrok.com):
 
-   ```bash
-   npm install
-   ```
+```bash
+ngrok http 3000
+```
 
-3. Create a `.env` file based on `.env.example`:
+Then in the [Pinnacle Webhooks dashboard](https://app.pinnacle.sh/dashboard/development/webhooks):
 
-   ```bash
-   cp .env.example .env
-   ```
+1. Add `https://<your-tunnel-domain>/webhook`
+2. Attach it to your RCS agent
+3. Copy the signing secret into `PINNACLE_SIGNING_SECRET`
 
-4. Configure your environment variables in `.env`:
+Send `MENU` or `START` to your agent — you'll see the Pinnacle Financial main menu with **My Card**, **Payments**, **Statements**, **Branches & ATMs**, and more.
+
+## Environment variables
 
 ```env
-PINNACLE_API_KEY=your_api_key_here
+PINNACLE_API_KEY=your_pinnacle_api_key_here
 PINNACLE_AGENT_ID=your_agent_id_here
-PINNACLE_SIGNING_SECRET=your_signing_secret_here
+PINNACLE_SIGNING_SECRET=your_pinnacle_signing_secret_here
 TEST_MODE=false
 PORT=3000
 ```
 
-5. Set up a public HTTPS URL for your webhook. For local development, you can use a tunneling service like [ngrok](https://ngrok.com):
+Brand assets (logo, card images, statement PDFs, branch photos) are all hardcoded in `lib/brand/data.ts`. Edit that file directly to swap in your own URLs.
 
-   ```bash
-   ngrok http 3000
-   ```
+## Project structure
 
-   For production, deploy to your preferred hosting provider.
-
-6. Connect your webhook to your RCS agent:
-   - Go to the [Pinnacle Webhooks Dashboard](https://app.pinnacle.sh/dashboard/development/webhooks)
-   - Add your public URL with the `/webhook` path (e.g., `https://your-domain.com/webhook`)
-   - Select your RCS agent to receive messages at this endpoint
-   - Copy the signing secret and add it to your `.env` file as `PINNACLE_SIGNING_SECRET`. The `process()` method uses this environment variable to verify the request signature.
-
-7. Text "MENU" to the bot to see the main menu.
-
-### Running the Application
-
-Development mode with auto-reload:
-
-```bash
-npm run dev
+```
+Pinnacle-Financial/
+├── server.ts              # Express bootstrap
+├── router.ts              # /webhook POST — verifies + dispatches
+└── lib/
+    ├── rcsClient.ts       # PinnacleClient instance
+    ├── baseAgent.ts       # Shared send + typing helpers
+    ├── typing.ts          # Fire-and-forget typing indicator
+    ├── agent.ts           # Agent — every action handler
+    └── brand/
+        ├── data.ts        # Business info, payments, statements, locations, cards
+        └── types.ts       # Card, Payment, Statement, Location
 ```
 
-Production mode:
+## Action handlers
 
-```bash
-npm start
-```
+| Action | What it does |
+| --- | --- |
+| `showMainMenu` | Landing card with all entry points |
+| `viewCard` | Active card carousel |
+| `lockCard` / `unlockCard` / `activateCard` | Card state mutations |
+| `reportFraud` | Fraud report flow |
+| `viewPayments` | Recent transactions |
+| `makePayment` / `processPayment` | Bill / transfer payment flow |
+| `viewStatements` / `moreStatements` | Statement list with pagination |
+| `viewLocations` / `viewHours` | ATM and branch finder + hours |
 
-## Configuration
+## Customize the bank brand
 
-### Environment Variables
+Everything brand-specific lives in `lib/brand/data.ts`:
 
-| Variable                  | Description                                                            | Required            |
-| ------------------------- | ---------------------------------------------------------------------- | ------------------- |
-| `PINNACLE_API_KEY`        | Your Pinnacle API key                                                  | Yes                 |
-| `PINNACLE_AGENT_ID`       | Your RCS agent ID from Pinnacle Dashboard                              | Yes                 |
-| `PINNACLE_SIGNING_SECRET` | Webhook signing secret for verification                                | Yes                 |
-| `TEST_MODE`               | Set to `true` for sending with a test RCS agent to whitelisted numbers | No (default: false) |
-| `PORT`                    | Server port                                                            | No (default: 3000)  |
+- `business` — bank name, logo, address
+- `recentPayments` — seed data for transaction history
+- `statements` — monthly statement metadata + PDF URLs
+- `locations` — ATMs and branches with hours and lat/lng
+- `cards` — credit and debit cards with last-4 and lock state
+- `hours` — branch hours image used in the location cards
 
-## Supported Actions
+## Going to production
 
-| Action           | Description                     |
-| ---------------- | ------------------------------- |
-| `showMainMenu`   | Display main banking menu       |
-| `viewPayments`   | View recent transactions        |
-| `viewStatements` | View monthly statements         |
-| `viewLocations`  | Find nearby ATMs/branches       |
-| `viewCard`       | View card details and status    |
-| `lockCard`       | Lock a card                     |
-| `unlockCard`     | Unlock a card                   |
-| `activateCard`   | Activate a new card             |
-| `reportFraud`    | Report a fraudulent transaction |
-| `makePayment`    | Initiate credit card payment    |
-| `processPayment` | Process payment amount          |
-| `viewHours`      | View branch operating hours     |
-
-## Development
-
-### Adding New Features
-
-1. Define action handlers in `lib/agent.ts`
-2. Add mock data in `lib/brand/data.ts` if needed
-3. Update types in `lib/brand/types.ts`
-4. Update router in `router.ts` to handle new actions
-
-## Technologies
-
-- **TypeScript**: Type-safe development
-- **Express**: Web framework for webhook handling
-- **rcs-js**: Pinnacle RCS SDK v2.0.6+
-- **tsx**: TypeScript execution and hot-reload
-
-## Support
-
-For issues related to:
-
-- RCS functionality: Contact Pinnacle support
-- Chatbot implementation: Refer to the code documentation
-- Configuration: Check the `.env.example` file
+- **NEVER** transmit real account numbers, balances, or PII without a signed BAA / DPA
+- Wire the cards/statements/payments to your core banking platform via authenticated API calls
+- Set `TEST_MODE=false` and submit your agent for [carrier approval](https://docs.pinnacle.sh/guides/campaigns/rcs)
+- Replace the in-memory state with your real customer database
+- Add hard authentication (OTP or biometric step-up) before showing balances
 
 ## Resources
 
-- **Dashboard**: Visit [Pinnacle Dashboard](https://app.pinnacle.sh)
-- **Documentation**: Visit [Pinnacle Documentation](https://docs.pinnacle.sh)
-- **Support**: Email [founders@trypinnacle.app](mailto:founders@trypinnacle.app)
+- **Live guide:** https://pinnacle.sh/samples/pinnacle-financial
+- **Pinnacle docs:** https://docs.pinnacle.sh/documentation/introduction
+- **Pinnacle dashboard:** https://app.pinnacle.sh
+- **Support:** founders@trypinnacle.app

@@ -1,38 +1,11 @@
 import { Payment, Statement, Location, Card } from './types';
 
-// Image URLs - replace with your own hosted images or set via environment variables
-const IMAGES = {
-  logo:
-    process.env.BANK_LOGO_URL ||
-    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/bank-building.jpg',
-  statementSept:
-    process.env.STATEMENT_SEPT_URL ||
-    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/statements.jpg',
-  statementAug:
-    process.env.STATEMENT_AUG_URL ||
-    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/statements.jpg',
-  statementJuly:
-    process.env.STATEMENT_JULY_URL ||
-    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/statements.jpg',
-  bankBranch:
-    process.env.BANK_BRANCH_URL ||
-    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/bank-building.jpg',
-  hours:
-    process.env.HOURS_IMAGE_URL ||
-    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/hours.jpg',
-  creditCard:
-    process.env.CREDIT_CARD_URL ||
-    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/credit.png',
-  debitCard:
-    process.env.DEBIT_CARD_URL ||
-    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/debit.png',
-};
-
 export const business = {
-  name: 'Pinnacle Bank',
-  tagline: 'Banking made simple',
+  name: 'Pinnacle Financial',
+  tagline: 'Banking at the summit.',
   phone: '+18005551234',
-  image: IMAGES.logo,
+  image:
+    'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/logo.png',
 };
 
 export const recentPayments: Payment[] = [
@@ -42,8 +15,7 @@ export const recentPayments: Payment[] = [
     amount: '$87.43',
     date: 'Oct 11, 2025',
     category: 'Groceries',
-    image:
-      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/groceries.jpg',
+    image: 'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/payment-groceries.png',
   },
   {
     id: 'txn_002',
@@ -51,8 +23,7 @@ export const recentPayments: Payment[] = [
     amount: '$52.18',
     date: 'Oct 10, 2025',
     category: 'Gas',
-    image:
-      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/gas-station.jpg',
+    image: 'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/payment-gas.png',
   },
   {
     id: 'txn_003',
@@ -60,8 +31,7 @@ export const recentPayments: Payment[] = [
     amount: '$15.99',
     date: 'Oct 9, 2025',
     category: 'Entertainment',
-    image:
-      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/entertainment.jpg',
+    image: 'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/payment-streaming.png',
   },
   {
     id: 'txn_004',
@@ -69,8 +39,7 @@ export const recentPayments: Payment[] = [
     amount: '$6.75',
     date: 'Oct 8, 2025',
     category: 'Dining',
-    image:
-      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/coffee.jpg',
+    image: 'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/payment-coffee.png',
   },
   {
     id: 'txn_005',
@@ -78,8 +47,7 @@ export const recentPayments: Payment[] = [
     amount: '$124.50',
     date: 'Oct 7, 2025',
     category: 'Shopping',
-    image:
-      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/shopping.jpg',
+    image: 'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/payment-shopping.png',
   },
 ];
 
@@ -89,31 +57,35 @@ export const statements: Statement[] = [
     year: '2025',
     balance: '$12,847.35',
     transactions: 15,
-    downloadUrl: IMAGES.statementSept,
+    downloadUrl:
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/statement-september.png',
   },
   {
     month: 'August',
     year: '2025',
     balance: '$11,923.18',
     transactions: 18,
-    downloadUrl: IMAGES.statementAug,
+    downloadUrl:
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/statement-august.png',
   },
   {
     month: 'July',
     year: '2025',
     balance: '$13,201.67',
     transactions: 12,
-    downloadUrl: IMAGES.statementJuly,
+    downloadUrl:
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/statement-july.png',
   },
 ];
 
 export const locations: Location[] = [
   {
-    name: 'PinnacleOne Downtown Branch',
+    name: 'Pinnacle Financial Downtown Branch',
     type: 'branch',
     address: '123 Main Street, San Francisco, CA 94102',
     distance: '0.3 miles',
-    image: IMAGES.bankBranch,
+    image:
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/location-downtown-branch.png',
     lat: 37.7749,
     lng: -122.4194,
   },
@@ -122,18 +94,17 @@ export const locations: Location[] = [
     type: 'atm',
     address: '456 Market Street, San Francisco, CA 94103',
     distance: '0.5 miles',
-    image:
-      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/atm.jpg',
+    image: 'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/location-union-square-atm.png',
     lat: 37.7879,
     lng: -122.4074,
   },
   {
-    name: 'PinnacleOne Financial Center',
+    name: 'Pinnacle Financial Center',
     type: 'branch',
     address: '789 Montgomery St, San Francisco, CA 94104',
     distance: '0.8 miles',
     image:
-      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/financial-center.jpg',
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/location-financial-center.png',
     lat: 37.7946,
     lng: -122.402,
   },
@@ -143,7 +114,7 @@ export const locations: Location[] = [
     address: 'One Ferry Building, San Francisco, CA 94111',
     distance: '1.1 miles',
     image:
-      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/demos/banking/atm.jpg',
+      'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/location-ferry-building-atm.png',
     lat: 37.7955,
     lng: -122.3937,
   },
@@ -176,37 +147,38 @@ export const cards: Card[] = [
   },
 ];
 
-export { IMAGES };
+const hoursImg =
+  'https://server.trypinnacle.app/storage/v1/object/public/pinnacle-public-assets/ARC/pinnacle-financial/hours-sign.png';
 
 export const hours = [
   {
     day: 'Monday',
     hours: '9:00 AM - 5:00 PM',
-    image: IMAGES.hours,
+    image: hoursImg,
   },
   {
     day: 'Tuesday',
     hours: '9:00 AM - 5:00 PM',
-    image: IMAGES.hours,
+    image: hoursImg,
   },
   {
     day: 'Wednesday',
     hours: '9:00 AM - 5:00 PM',
-    image: IMAGES.hours,
+    image: hoursImg,
   },
   {
     day: 'Thursday',
     hours: '9:00 AM - 5:00 PM',
-    image: IMAGES.hours,
+    image: hoursImg,
   },
   {
     day: 'Friday',
     hours: '9:00 AM - 5:00 PM',
-    image: IMAGES.hours,
+    image: hoursImg,
   },
   {
     day: 'Saturday',
     hours: '9:00 AM - 5:00 PM',
-    image: IMAGES.hours,
+    image: hoursImg,
   },
 ];

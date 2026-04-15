@@ -1,15 +1,22 @@
 import { Router, Request, Response } from 'express';
-import { TriggerPayload } from './lib/brand/types';
-import { agent } from './lib/agent';
 import { rcsClient } from './lib/rcsClient';
+import { agent } from './lib/agent';
+import { sendTypingIndicator } from './lib/typing';
+
+
+interface TriggerPayload {
+  action: string;
+  params?: Record<string, unknown>;
+}
 
 const pinnacleOneRouter = Router();
 
 pinnacleOneRouter.post('/', async (req: Request, res: Response) => {
   try {
     const messageEvent = await rcsClient.messages.process(req);
-    if (!('message' in messageEvent)) {
-      return res.status(200).json({ message: 'No message found' });
+    if (messageEvent.type !== 'MESSAGE.RECEIVED') {
+      console.error('[Pinnacle Financial]: User event received', messageEvent);
+      return res.status(200).json({ message: 'User event received' });
     }
     const message = messageEvent.message;
     const from = messageEvent.conversation.from;
@@ -20,6 +27,7 @@ pinnacleOneRouter.post('/', async (req: Request, res: Response) => {
       typeof message.button.raw === 'object' &&
       message.button.raw.type == 'trigger'
     ) {
+      sendTypingIndicator(from);
       const payload: TriggerPayload = JSON.parse(message.button.raw.payload);
 
       switch (payload.action) {
@@ -41,7 +49,7 @@ pinnacleOneRouter.post('/', async (req: Request, res: Response) => {
 
         case 'lockCard':
           if (!payload.params?.cardId) {
-            console.error('[PinnacleOne]: Missing cardId', payload);
+            console.error('[Pinnacle Financial]: Missing cardId', payload);
             return res.status(400).json({ error: 'Missing cardId' });
           }
           await agent.lockCard(from, payload.params.cardId as string);
@@ -49,7 +57,7 @@ pinnacleOneRouter.post('/', async (req: Request, res: Response) => {
 
         case 'unlockCard':
           if (!payload.params?.cardId) {
-            console.error('[PinnacleOne]: Missing cardId', payload);
+            console.error('[Pinnacle Financial]: Missing cardId', payload);
             return res.status(400).json({ error: 'Missing cardId' });
           }
           await agent.unlockCard(from, payload.params.cardId as string);
@@ -57,7 +65,7 @@ pinnacleOneRouter.post('/', async (req: Request, res: Response) => {
 
         case 'activateCard':
           if (!payload.params?.cardId) {
-            console.error('[PinnacleOne]: Missing cardId', payload);
+            console.error('[Pinnacle Financial]: Missing cardId', payload);
             return res.status(400).json({ error: 'Missing cardId' });
           }
           await agent.activateCard(from, payload.params.cardId as string);
@@ -89,7 +97,7 @@ pinnacleOneRouter.post('/', async (req: Request, res: Response) => {
 
         case 'processPayment':
           if (!payload.params?.amount || !payload.params?.cardId) {
-            console.error('[PinnacleOne]: Missing payment params', payload);
+            console.error('[Pinnacle Financial]: Missing payment params', payload);
             return res.status(400).json({ error: 'Missing payment parameters' });
           }
           await agent.processPayment(
@@ -100,7 +108,7 @@ pinnacleOneRouter.post('/', async (req: Request, res: Response) => {
           return res.status(200).json({ message: 'Payment processed' });
 
         default:
-          console.error('[PinnacleOne]: Invalid trigger payload', payload);
+          console.error('[Pinnacle Financial]: Invalid trigger payload', payload);
           return res.status(400).json({
             error: 'Invalid Trigger Payload',
             received: message,
@@ -110,11 +118,13 @@ pinnacleOneRouter.post('/', async (req: Request, res: Response) => {
 
     // Handle location messages
     if (message.type === 'RCS_LOCATION_DATA') {
+      sendTypingIndicator(from);
       return await agent.viewLocations(from);
     }
 
     // Handle text messages
     if (message.type === 'RCS_TEXT') {
+      sendTypingIndicator(from);
       const text = message.text.trim();
 
       if (text === 'START' || text === 'SUBSCRIBE' || text === 'MENU') {
@@ -128,11 +138,12 @@ pinnacleOneRouter.post('/', async (req: Request, res: Response) => {
     }
 
     // Message or event was not captured by handler
-    return res.status(200).json({
-      message: 'Unhandled message type',
+    console.error('[Pinnacle Financial]: Unhandled message type');
+    return res.status(400).json({
+      error: 'Unhandled message type',
     });
   } catch (error) {
-    console.error('[PinnacleOne]: Internal server error', error);
+    console.error('[Pinnacle Financial]: Internal server error', error);
     return res.status(500).json({
       error: 'Internal server error',
       message: error instanceof Error ? error.message : 'Unknown error',

@@ -33,8 +33,3 @@ export interface Card {
   status: 'active' | 'locked' | 'inactive';
   balance: string;
 }
-
-export interface TriggerPayload {
-  action: string;
-  params?: Record<string, unknown>;
-}

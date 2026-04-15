@@ -1,5 +1,5 @@
 {
-  "name": "banking-services",
+  "name": "pinnacle-financial",
   "version": "1.0.0",
   "description": "A banking services RCS chatbot for viewing accounts, managing cards, viewing statements, and finding ATM/branch locations",
   "main": "server.ts",
@@ -23,7 +23,7 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
-    "rcs-js": "^2.0.6"
+    "rcs-js": "^2.0.15"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
